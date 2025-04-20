@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>簡単タロット占い</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+      background: #f9f9f9;
+    }
+    #card-image {
+      max-width: 90%;
+      max-height: 50%;
+      transition: transform 0.3s ease;
+      margin-bottom: 1rem;
+    }
+    #card-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    #draw-button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+    }
+    #draw-button:hover {
+      background-color: #45a049;
+    }
+    #orientation {
+      font-size: 0.9rem;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <img id="card-image" src="" alt="タロットカード" />
+  <div id="card-name"></div>
+  <button id="draw-button">カードを引く</button>
+  <div id="orientation"></div>
+
+  <script>
+    // Rider-Waite 1909 デッキの Major Arcana 22枚を Sacred-Texts から直接読み込み
+    const total = 22;
+    const cards = Array.from({ length: total }, (_, i) => {
+      const num = String(i).padStart(2, '0');
+      return `https://www.sacred-texts.com/tarot/pkt/img/ar${num}.jpg`;
+    });
+
+    // Major Arcanaの日本語名対応
+    const names = [
+      '愚者', '魔術師', '女教皇', '女帝', '皇帝',
+      '法王', '恋人', '戦車', '力', '隠者',
+      '運命の輪', '正義', '吊るされた男', '死神', '節制',
+      '悪魔', '塔', '星', '月', '太陽',
+      '審判', '世界'
+    ];
+
+    const imgEl = document.getElementById('card-image');
+    const nameEl = document.getElementById('card-name');
+    const btn = document.getElementById('draw-button');
+    const orientationEl = document.getElementById('orientation');
+
+    function drawCard() {
+      // ランダムにカード選択
+      const idx = Math.floor(Math.random() * cards.length);
+      imgEl.src = cards[idx];
+      nameEl.textContent = names[idx];
+
+      // 正位置か逆位置かランダム
+      const isReversed = Math.random() < 0.5;
+      if (isReversed) {
+        imgEl.style.transform = 'rotate(180deg)';
+        orientationEl.textContent = '逆位置';
+      } else {
+        imgEl.style.transform = 'rotate(0deg)';
+        orientationEl.textContent = '正位置';
+      }
+    }
+
+    // ボタンクリック時のみカードを引く
+    btn.addEventListener('click', drawCard);
+  </script>
+</body>
+</html>
